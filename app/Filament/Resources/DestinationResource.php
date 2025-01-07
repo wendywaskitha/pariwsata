@@ -10,6 +10,8 @@ use Filament\Tables\Table;
 use App\Models\Destination;
 use Filament\Resources\Resource;
 use Dotswan\MapPicker\Fields\Map;
+use Filament\Support\Enums\FontWeight;
+use Filament\Tables\Columns\Layout\Stack;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DestinationResource\Pages;
@@ -79,28 +81,26 @@ class DestinationResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('category.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('latitude')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('longitude')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('contact_info')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Stack::make([
+                    Tables\Columns\ImageColumn::make('image')->size(200)->alignCenter()->rounded('xl'),
+                    Tables\Columns\TextColumn::make('name')
+                        ->icon('heroicon-o-rectangle-stack')
+                        ->alignCenter()
+                        ->weight(FontWeight::Bold)
+                        ->searchable(),
+                    Tables\Columns\TextColumn::make('contact_info')
+                        ->icon('heroicon-o-phone')
+                        ->alignCenter()
+                        ->searchable(),
+                    Tables\Columns\BadgeColumn::make('category.name')
+                        ->alignCenter()
+                        ->sortable(),
+                ]),
+
+            ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
             ])
             ->filters([
                 //
